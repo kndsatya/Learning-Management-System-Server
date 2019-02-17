@@ -4,6 +4,7 @@ import com.example.whiteboardsp19.model.Course;
 import com.example.whiteboardsp19.model.Lesson;
 import com.example.whiteboardsp19.model.Module;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,7 @@ import java.util.Random;
 import javax.servlet.http.HttpSession;
 
 @RestController
+@CrossOrigin(origins = "*", allowCredentials = "true", allowedHeaders = "*")
 public class LessonService {
 
   private CourseService courseService = new CourseService();
@@ -28,7 +30,7 @@ public class LessonService {
                                    HttpSession session) {
 
     List<Course> courses = courseService.findAllCourses(session);
-    if (courses != null) {
+    if (courses.size()!=0) {
       for (Course course : courses) {
         List<Module> modules = course.getModules();
         for (Module module : modules) {
@@ -43,7 +45,7 @@ public class LessonService {
         }
       }
     }
-    return null;
+    return new ArrayList<>();
 
   }
 
@@ -60,14 +62,14 @@ public class LessonService {
         }
       }
     }
-    return null;
+    return new ArrayList<>();
   }
 
   @GetMapping("/api/lesson/{lid}")
   public Lesson findLessonById(@PathVariable("lid") Integer lessonId, HttpSession session) {
 
     List<Course> courses = courseService.findAllCourses(session);
-    if (courses != null) {
+    if (courses.size() != 0) {
       for (Course course : courses) {
         List<Module> modules = course.getModules();
         for (Module module : modules) {
@@ -79,7 +81,7 @@ public class LessonService {
         }
       }
     }
-    return null;
+    return new Lesson();
   }
 
   @PutMapping("/api/lesson/{lid}")
@@ -87,7 +89,7 @@ public class LessonService {
                              HttpSession session) {
 
     List<Course> courses = courseService.findAllCourses(session);
-    if (courses != null) {
+    if (courses.size()!=0) {
       for (Course course : courses) {
         List<Module> modules = course.getModules();
         for (Module module : modules) {
@@ -101,13 +103,13 @@ public class LessonService {
         }
       }
     }
-    return null;
+    return new Lesson();
   }
 
   @DeleteMapping("/api/lesson/{lid}")
   public List<Lesson> deleteLesson(@PathVariable("lid") Integer lessonId, HttpSession session) {
     List<Course> courses = courseService.findAllCourses(session);
-    if (courses != null) {
+    if (courses.size() != 0) {
       for (Course course : courses) {
         List<Module> modules = course.getModules();
         for (Module module : modules) {
@@ -121,6 +123,6 @@ public class LessonService {
         }
       }
     }
-    return null;
+    return new ArrayList<>();
   }
 }

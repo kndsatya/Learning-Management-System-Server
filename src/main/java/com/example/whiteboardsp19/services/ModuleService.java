@@ -3,6 +3,7 @@ package com.example.whiteboardsp19.services;
 import com.example.whiteboardsp19.model.Course;
 import com.example.whiteboardsp19.model.Module;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +19,7 @@ import java.util.Random;
 import javax.servlet.http.HttpSession;
 
 @RestController
+@CrossOrigin(origins = "*", allowCredentials = "true", allowedHeaders = "*")
 public class ModuleService {
 
   private CourseService courseService = new CourseService();
@@ -28,7 +30,7 @@ public class ModuleService {
 
     Course course = courseService.findCourseById(cid,session);
 
-    if(course!=null){
+    if(course.getId()!=null){
       List<Module> currentModules = course.getModules();
       Random r = new Random();
       module.setId(r.nextInt(Integer.MAX_VALUE));
@@ -38,7 +40,7 @@ public class ModuleService {
       return currentModules;
     }
 
-    return null;
+    return new ArrayList<>();
 
   }
 
@@ -46,10 +48,10 @@ public class ModuleService {
   public List<Module> findAllModules(@PathVariable("cid") Integer cid,HttpSession session){
 
     Course course = courseService.findCourseById(cid,session);
-    if(course!=null){
+    if(course.getId()!=null){
       return course.getModules();
     }
-    return null;
+    return new ArrayList<>();
 
   }
 
@@ -57,7 +59,7 @@ public class ModuleService {
   public Module findModuleById(@PathVariable("mid") Integer moduleId,HttpSession session){
 
     List<Course> courses = courseService.findAllCourses(session);
-    if(courses!=null){
+    if(courses.size()!=0){
        for(Course course:courses){
          List<Module> modules = course.getModules();
          for(Module module:modules){
@@ -67,7 +69,7 @@ public class ModuleService {
          }
        }
     }
-    return null;
+    return new Module();
   }
 
   @PutMapping("/api/modules/{mid}")
@@ -75,7 +77,7 @@ public class ModuleService {
                              HttpSession session){
 
     List<Course> courses = courseService.findAllCourses(session);
-    if(courses!=null){
+    if(courses.size()!=0){
       for(Course course:courses){
         List<Module> modules = course.getModules();
         for(int i=0;i<modules.size();i++){
@@ -86,14 +88,14 @@ public class ModuleService {
         }
       }
     }
-    return null;
+    return new Module();
   }
 
   @DeleteMapping("/api/modules/{mid}")
   public List<Module> deleteModule(@PathVariable("mid") Integer moduleId,HttpSession session){
 
     List<Course> courses = courseService.findAllCourses(session);
-    if(courses!=null){
+    if(courses.size()!=0){
       for(Course course:courses){
         List<Module> modules = course.getModules();
         for(int i=0;i<modules.size();i++){
@@ -104,6 +106,6 @@ public class ModuleService {
         }
       }
     }
-    return null;
+    return new ArrayList<>();
   }
 }
