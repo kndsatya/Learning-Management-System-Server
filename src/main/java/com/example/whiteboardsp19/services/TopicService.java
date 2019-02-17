@@ -5,6 +5,7 @@ import com.example.whiteboardsp19.model.Lesson;
 import com.example.whiteboardsp19.model.Module;
 import com.example.whiteboardsp19.model.Topic;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +21,7 @@ import java.util.Random;
 import javax.servlet.http.HttpSession;
 
 @RestController
+@CrossOrigin(origins = "*", allowCredentials = "true", allowedHeaders = "*")
 public class TopicService {
 
   private CourseService courseService = new CourseService();
@@ -29,7 +31,7 @@ public class TopicService {
                                  HttpSession session) {
 
     List<Course> courses = courseService.findAllCourses(session);
-    if (courses != null) {
+    if (courses.size() != 0) {
       for (Course course : courses) {
         List<Module> modules = course.getModules();
         for (Module module : modules) {
@@ -46,7 +48,7 @@ public class TopicService {
         }
       }
     }
-    return null;
+    return new ArrayList<>();
   }
 
   @GetMapping("/api/lesson/{lid}/topic")
@@ -64,14 +66,14 @@ public class TopicService {
         }
       }
     }
-    return null;
+    return new ArrayList<>();
   }
 
   @GetMapping("/api/topic/{tid}")
   public Topic findTopicById(@PathVariable("tid") Integer topicId, HttpSession session) {
 
     List<Course> courses = courseService.findAllCourses(session);
-    if (courses != null) {
+    if (courses.size() != 0) {
       for (Course course : courses) {
         List<Module> modules = course.getModules();
         for (Module module : modules) {
@@ -85,7 +87,7 @@ public class TopicService {
         }
       }
     }
-    return null;
+    return new Topic();
   }
 
   @PutMapping("/api/topic/{tid}")
@@ -93,7 +95,7 @@ public class TopicService {
                              HttpSession session) {
 
     List<Course> courses = courseService.findAllCourses(session);
-    if (courses != null) {
+    if (courses.size() != 0) {
       for (Course course : courses) {
         List<Module> modules = course.getModules();
         for (Module module : modules) {
@@ -110,13 +112,13 @@ public class TopicService {
         }
       }
     }
-    return null;
+    return new Topic();
   }
 
   @DeleteMapping("/api/topic/{tid}")
   public List<Topic> deleteTopic(@PathVariable("tid") Integer topicId, HttpSession session) {
     List<Course> courses = courseService.findAllCourses(session);
-    if (courses != null) {
+    if (courses.size() != 0) {
       for (Course course : courses) {
         List<Module> modules = course.getModules();
         for (Module module : modules) {
@@ -133,6 +135,6 @@ public class TopicService {
         }
       }
     }
-    return null;
+    return new ArrayList<>();
   }
 }
