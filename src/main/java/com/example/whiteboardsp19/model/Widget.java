@@ -1,8 +1,19 @@
 package com.example.whiteboardsp19.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
+@Entity
 public class Widget {
 
+      @Id
+      @GeneratedValue(strategy = GenerationType.IDENTITY)
       private Integer widgetId;
+      @ManyToOne()
+      private Topic topic;
       private String widgetType;
       private Integer width;
       private Integer height;

@@ -29,30 +29,30 @@ public class CourseService {
   private static List<Course> courses;
 
   public CourseService() {
-
-    User alice = new User(123, "alice", "alice", "alice@husky.neu.edu",
-            "alice", "warner", 1234567890L,
-            "FACULTY", LocalDate.of(1999, 02, 01));
-
-    User bob = new User(234, "bob", "bob", "bob@husky.neu.edu",
-            "bob", "warner", 1230456789L,
-            "FACULTY", LocalDate.of(1999, 02, 01));
-
-    Topic topic = new Topic(123,"first topic",new ArrayList<>());
-    List<Topic> topicList = new ArrayList<>();
-    topicList.add(topic);
-    Lesson lesson = new Lesson(123,"firstLesson",topicList);
-    List<Lesson> lessonList = new ArrayList<>();
-    lessonList.add(lesson);
-    Module module = new Module(123,"Module Name",lessonList);
-    List<Module> moduleList = new ArrayList<>();
-    moduleList.add(module);
-    Course webDev = new Course(123, "Web Dev", alice, moduleList);
-    Course softwareEngineering = new Course(234, "Software Engineering", alice, new ArrayList<>());
+//
+//    User alice = new User(123, "alice", "alice", "alice@husky.neu.edu",
+//            "alice", "warner", 1234567890L,
+//            "FACULTY", LocalDate.of(1999, 02, 01));
+//
+//    User bob = new User(234, "bob", "bob", "bob@husky.neu.edu",
+//            "bob", "warner", 1230456789L,
+//            "FACULTY", LocalDate.of(1999, 02, 01));
+//
+//    Topic topic = new Topic(123,"first topic",new ArrayList<>());
+//    List<Topic> topicList = new ArrayList<>();
+//    topicList.add(topic);
+//    Lesson lesson = new Lesson(123,"firstLesson",topicList);
+//    List<Lesson> lessonList = new ArrayList<>();
+//    lessonList.add(lesson);
+//    Module module = new Module(123,"Module Name",lessonList);
+//    List<Module> moduleList = new ArrayList<>();
+//    moduleList.add(module);
+//    Course webDev = new Course(123, "Web Dev", alice, moduleList);
+//    Course softwareEngineering = new Course(234, "Software Engineering", alice, new ArrayList<>());
 
     courses = new ArrayList<>();
-    courses.add(webDev);
-    courses.add(softwareEngineering);
+//    courses.add(webDev);
+//    courses.add(softwareEngineering);
   }
 
 

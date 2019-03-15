@@ -1,26 +1,48 @@
 package com.example.whiteboardsp19.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+@Entity
 public class Course {
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
   private String courseName;
+  @ManyToOne()
+  @JsonIgnore()
   private User author;
+  @OneToMany(mappedBy = "course")
   private List<Module> modules;
 
   public Course(){
 
   }
 
-  public Course(Integer id,String courseName,User author,List<Module> modules){
+  public Course(String courseName,User author){
 
-    this.id = id;
     this.courseName = courseName;
     this.author = author;
-    this.modules = modules;
 
   }
+
+//  public Course(Integer id,String courseName,User author,List<Module> modules){
+//
+//    this.id = id;
+//    this.courseName = courseName;
+//    this.author = author;
+//    this.modules = modules;
+//
+//  }
 
   public Integer getId() {
     return id;

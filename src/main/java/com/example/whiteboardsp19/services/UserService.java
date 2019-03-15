@@ -27,16 +27,16 @@ public class UserService {
 
   public UserService(){
 
-       User alice = new User(123,"alice","alice","alice@husky.neu.edu",
-               "alice","warner",1234567890L,
-               "FACULTY", LocalDate.of(1999,02,01));
-
-       User bob = new User(234,"bob","bob","bob@husky.neu.edu",
-               "bob","warner",1230456789L,
-            "FACULTY",LocalDate.of(1999,02,01));
-
-       users.add(alice);
-       users.add(bob);
+//       User alice = new User(123,"alice","alice","alice@husky.neu.edu",
+//               "alice","warner",1234567890L,
+//               "FACULTY", LocalDate.of(1999,02,01));
+//
+//       User bob = new User(234,"bob","bob","bob@husky.neu.edu",
+//               "bob","warner",1230456789L,
+//            "FACULTY",LocalDate.of(1999,02,01));
+//
+//       users.add(alice);
+//       users.add(bob);
   }
 
   @PostMapping("/api/register")

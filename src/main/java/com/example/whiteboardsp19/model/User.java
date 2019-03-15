@@ -6,9 +6,19 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+@Entity
 public class User {
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   protected Integer id;
   protected String username;
   protected String password;
@@ -18,25 +28,33 @@ public class User {
   protected Long phone;
   protected String role;
   protected LocalDate dateOfBirth;
+  @OneToMany(mappedBy = "author")
+  private List<Course> authoredCourses;
 
   public User(){
 
   }
 
-  public User(Integer id,String username,String password,String email,String firstName,
-       String lastName,Long phone,String role,LocalDate dateOfBirth){
-
-    this.id = id;
+  public User(String username,String password){
     this.username = username;
     this.password = password;
-    this.email = email;
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.phone = phone;
-    this.role = role;
-    this.dateOfBirth = dateOfBirth;
-
   }
+
+//
+//  public User(Integer id,String username,String password,String email,String firstName,
+//       String lastName,Long phone,String role,LocalDate dateOfBirth){
+//
+//    this.id = id;
+//    this.username = username;
+//    this.password = password;
+//    this.email = email;
+//    this.firstName = firstName;
+//    this.lastName = lastName;
+//    this.phone = phone;
+//    this.role = role;
+//    this.dateOfBirth = dateOfBirth;
+//
+//  }
 
   public Integer getId() {
     return id;
@@ -76,6 +94,14 @@ public class User {
 
   public void setFirstName(String firstName) {
     this.firstName = firstName;
+  }
+
+  public List<Course> getAuthoredCourses() {
+    return authoredCourses;
+  }
+
+  public void setAuthoredCourses(List<Course> authoredCourses) {
+    this.authoredCourses = authoredCourses;
   }
 
   public String getLastName() {
