@@ -1,10 +1,7 @@
 package com.example.whiteboardsp19.services;
 
 import com.example.whiteboardsp19.model.User;
-import com.example.whiteboardsp19.repository.CourseRepository;
 import com.example.whiteboardsp19.repository.UserRepository;
-
-import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -36,16 +33,6 @@ public class UserService {
 
   public UserService() {
 
-//       User alice = new User(123,"alice","alice","alice@husky.neu.edu",
-//               "alice","warner",1234567890L,
-//               "FACULTY", LocalDate.of(1999,02,01));
-//
-//       User bob = new User(234,"bob","bob","bob@husky.neu.edu",
-//               "bob","warner",1230456789L,
-//            "FACULTY",LocalDate.of(1999,02,01));
-//
-//       users.add(alice);
-//       users.add(bob);
   }
 
   @PostMapping("/api/register")
@@ -84,6 +71,7 @@ public class UserService {
       User existingUser = userIterator.next();
       if (existingUser.getUsername().equals(user.getUsername()) &&
               existingUser.getPassword().equals(user.getPassword())) {
+        session.setAttribute("CurrentUser",existingUser);
         return existingUser;
       }
     }
