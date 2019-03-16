@@ -63,7 +63,6 @@ public class Course {
   }
 
   public void set(Course newCourse){
-    this.id = newCourse.getId();
     this.author = newCourse.getAuthor();
     this.courseName = newCourse.courseName;
   }

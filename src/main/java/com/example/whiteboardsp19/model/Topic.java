@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,7 +22,16 @@ public class Topic {
   @ManyToOne()
   @JsonIgnore
   private Lesson lesson;
-  @OneToMany(mappedBy = "topic")
+
+  public Lesson getLesson() {
+    return lesson;
+  }
+
+  public void setLesson(Lesson lesson) {
+    this.lesson = lesson;
+  }
+
+  @OneToMany(mappedBy = "topic",cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Widget> widgets;
 
   public Topic(){
@@ -56,5 +66,9 @@ public class Topic {
 
   public void setWidgets(List<Widget> widgets) {
     this.widgets = widgets;
+  }
+
+  public void set(Topic newTopic){
+    this.topicName = newTopic.getTopicName();
   }
 }

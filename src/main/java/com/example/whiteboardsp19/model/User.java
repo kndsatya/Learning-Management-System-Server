@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,7 +29,7 @@ public class User {
   protected Long phone;
   protected String role;
   protected LocalDate dateOfBirth;
-  @OneToMany(mappedBy = "author")
+  @OneToMany(mappedBy = "author",cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Course> authoredCourses;
 
   public User(){

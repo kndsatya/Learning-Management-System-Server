@@ -71,12 +71,12 @@ public class CourseService {
       return new Course();
     }
 
-    Iterable<Course> courseIterable = courseRepository.findAll();
-    while (courseIterable.iterator().hasNext()) {
-      Course course = courseIterable.iterator().next();
-      if (course.getAuthor().getId() == currentUser.getId()) {
-        return course;
-      }
+    Optional<Course> optionalCourse = courseRepository.findById(courseId);
+    if(optionalCourse.isPresent()){
+       Course resultCourse = optionalCourse.get();
+       if(resultCourse.getAuthor().getId()==currentUser.getId()){
+         return resultCourse;
+       }
     }
     return new Course();
   }

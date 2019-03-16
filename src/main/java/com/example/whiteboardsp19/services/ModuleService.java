@@ -31,18 +31,19 @@ public class ModuleService {
   private CourseService courseService;
   @Autowired
   private ModuleRepository moduleRepository;
-  @Autowired
-  private UserService userService;
 
   @PostMapping("/api/courses/{cid}/modules")
   public List<Module> createModule(@PathVariable("cid") Integer cid, @RequestBody Module module,
                                    HttpSession session) {
 
+    System.out.println("received ID: "+cid+" "+"received module: "+ module.getModuleName());
     Course course = courseService.findCourseById(cid, session);
+    System.out.println("Received Course: "+course.getId());
     if (course.getId() != null) {
       module.setCourse(course);
       module.setLessons(new ArrayList<>());
-      moduleRepository.save(module);
+      Module savedModule = moduleRepository.save(module);
+      System.out.println("Saved Module: "+savedModule.getModuleName());
       return findAllModules(cid, session);
     }
     return new ArrayList<>();
