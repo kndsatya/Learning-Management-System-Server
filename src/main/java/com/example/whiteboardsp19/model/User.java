@@ -136,4 +136,15 @@ public class User {
     this.dateOfBirth = dateOfBirth;
   }
 
+  public void set(User newUser){
+    this.username = newUser.username;
+    this.password = newUser.password;
+    this.email = newUser.email;
+    this.firstName = newUser.firstName;
+    this.lastName = newUser.lastName;
+    this.phone = newUser.phone;
+    this.role = newUser.role;
+    this.dateOfBirth = newUser.dateOfBirth;
+  }
+
 }

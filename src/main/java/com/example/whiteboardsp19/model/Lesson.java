@@ -1,5 +1,7 @@
 package com.example.whiteboardsp19.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -17,7 +19,8 @@ public class Lesson {
   private Integer id;
   private String lessonName;
   @ManyToOne()
-  private String module;
+  @JsonIgnore
+  private Module module;
   @OneToMany(mappedBy = "lesson")
   private List<Topic> topics;
 

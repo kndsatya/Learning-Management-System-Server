@@ -1,5 +1,7 @@
 package com.example.whiteboardsp19.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,6 +15,7 @@ public class Widget {
       @GeneratedValue(strategy = GenerationType.IDENTITY)
       private Integer widgetId;
       @ManyToOne()
+      @JsonIgnore
       private Topic topic;
       private String widgetType;
       private Integer width;
