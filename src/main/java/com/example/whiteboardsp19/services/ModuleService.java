@@ -2,7 +2,11 @@ package com.example.whiteboardsp19.services;
 
 import com.example.whiteboardsp19.model.Course;
 import com.example.whiteboardsp19.model.Module;
+import com.example.whiteboardsp19.model.User;
+import com.example.whiteboardsp19.repository.CourseRepository;
+import com.example.whiteboardsp19.repository.ModuleRepository;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import javax.servlet.http.HttpSession;
@@ -22,88 +27,92 @@ import javax.servlet.http.HttpSession;
 @CrossOrigin(origins = "*", allowCredentials = "true", allowedHeaders = "*")
 public class ModuleService {
 
-  private CourseService courseService = new CourseService();
+  @Autowired
+  private CourseService courseService;
+  @Autowired
+  private ModuleRepository moduleRepository;
+  @Autowired
+  private UserService userService;
 
   @PostMapping("/api/courses/{cid}/modules")
   public List<Module> createModule(@PathVariable("cid") Integer cid, @RequestBody Module module,
-                             HttpSession session){
+                                   HttpSession session) {
 
-    Course course = courseService.findCourseById(cid,session);
-
-    if(course.getId()!=null){
-      List<Module> currentModules = course.getModules();
-      Random r = new Random();
-      module.setId(r.nextInt(Integer.MAX_VALUE));
+    Course course = courseService.findCourseById(cid, session);
+    if (course.getId() != null) {
+      module.setCourse(course);
       module.setLessons(new ArrayList<>());
-      currentModules.add(module);
-      course.setModules(currentModules);
-      return currentModules;
+      moduleRepository.save(module);
+      return findAllModules(cid, session);
     }
-
     return new ArrayList<>();
-
   }
 
   @GetMapping("/api/courses/{cid}/modules")
-  public List<Module> findAllModules(@PathVariable("cid") Integer cid,HttpSession session){
-
-    Course course = courseService.findCourseById(cid,session);
-    if(course.getId()!=null){
+  public List<Module> findAllModules(@PathVariable("cid") Integer cid, HttpSession session) {
+    Course course = courseService.findCourseById(cid, session);
+    if (course.getId() != null) {
       return course.getModules();
     }
     return new ArrayList<>();
-
   }
 
   @GetMapping("/api/modules/{mid}")
-  public Module findModuleById(@PathVariable("mid") Integer moduleId,HttpSession session){
+  public Module findModuleById(@PathVariable("mid") Integer moduleId, HttpSession session) {
 
-    List<Course> courses = courseService.findAllCourses(session);
-    if(courses.size()!=0){
-       for(Course course:courses){
-         List<Module> modules = course.getModules();
-         for(Module module:modules){
-           if(module.getId().equals(moduleId)){
-             return module;
-           }
-         }
-       }
+    User currentUser = (User) session.getAttribute("CurrentUser");
+
+    if (currentUser == null) {
+      return new Module();
+    }
+
+    Optional<Module> optionalObject = moduleRepository.findById(moduleId);
+    if (optionalObject.isPresent()) {
+      Module module = optionalObject.get();
+      if (module.getCourse().getAuthor().getId() == currentUser.getId()) {
+        return module;
+      }
     }
     return new Module();
   }
 
   @PutMapping("/api/modules/{mid}")
-  public Module updateModule(@PathVariable("mid") Integer moduleId,@RequestBody Module updatedModule,
-                             HttpSession session){
+  public Module updateModule(@PathVariable("mid") Integer moduleId, @RequestBody Module updatedModule,
+                             HttpSession session) {
 
-    List<Course> courses = courseService.findAllCourses(session);
-    if(courses.size()!=0){
-      for(Course course:courses){
-        List<Module> modules = course.getModules();
-        for(int i=0;i<modules.size();i++){
-          if(modules.get(i).getId().equals(moduleId)){
-            modules.set(i,updatedModule);
-            return modules.get(i);
-          }
-        }
+    User currentUser = (User) session.getAttribute("CurrentUser");
+
+    if (currentUser == null) {
+      return new Module();
+    }
+
+    Optional<Module> optionalModule = moduleRepository.findById(moduleId);
+    if (optionalModule.isPresent()) {
+      Module module = optionalModule.get();
+      if (module.getCourse().getAuthor().getId() == currentUser.getId()) {
+        module.set(updatedModule);
+        Module resultModule = moduleRepository.save(module);
+        return resultModule;
       }
     }
     return new Module();
   }
 
   @DeleteMapping("/api/modules/{mid}")
-  public List<Module> deleteModule(@PathVariable("mid") Integer moduleId,HttpSession session){
+  public List<Module> deleteModule(@PathVariable("mid") Integer moduleId, HttpSession session) {
 
-    List<Course> courses = courseService.findAllCourses(session);
-    if(courses.size()!=0){
-      for(Course course:courses){
-        List<Module> modules = course.getModules();
-        for(int i=0;i<modules.size();i++){
-          if(modules.get(i).getId().equals(moduleId)){
-            modules.remove(i);
-            return modules;
-          }
-        }
+    User currentUser = (User) session.getAttribute("CurrentUser");
+
+    if (currentUser == null) {
+      return new ArrayList<>();
+    }
+
+    Optional<Module> optionalModule = moduleRepository.findById(moduleId);
+    if (optionalModule.isPresent()) {
+      Module module = optionalModule.get();
+      if (module.getCourse().getAuthor().getId() == currentUser.getId()) {
+        moduleRepository.deleteById(moduleId);
+        return findAllModules(module.getCourse().getId(), session);
       }
     }
     return new ArrayList<>();

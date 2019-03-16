@@ -3,7 +3,9 @@ package com.example.whiteboardsp19.services;
 import com.example.whiteboardsp19.model.Course;
 import com.example.whiteboardsp19.model.Lesson;
 import com.example.whiteboardsp19.model.Module;
+import com.example.whiteboardsp19.repository.LessonRepository;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +25,10 @@ import javax.servlet.http.HttpSession;
 @CrossOrigin(origins = "*", allowCredentials = "true", allowedHeaders = "*")
 public class LessonService {
 
-  private CourseService courseService = new CourseService();
+  @Autowired
+  private CourseService courseService;
+  @Autowired
+  private LessonRepository lessonRepository;
 
   @PostMapping("/api/module/{mid}/lesson")
   public List<Lesson> createLesson(@PathVariable("mid") Integer moduleId, @RequestBody Lesson lesson,

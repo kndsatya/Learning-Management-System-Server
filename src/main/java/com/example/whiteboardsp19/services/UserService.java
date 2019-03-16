@@ -42,6 +42,7 @@ public class UserService {
       }
     }
 
+    user.setAuthoredCourses(new ArrayList<>());
     user = userRepository.save(user);
     session.setAttribute("CurrentUser", user);
     return user;

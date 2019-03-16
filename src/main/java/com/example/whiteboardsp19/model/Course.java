@@ -20,7 +20,7 @@ public class Course {
   private Integer id;
   private String courseName;
   @ManyToOne()
-  @JsonIgnore()
+  @JsonIgnore
   private User author;
   @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Module> modules;
