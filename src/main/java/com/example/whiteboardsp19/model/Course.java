@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,28 +22,12 @@ public class Course {
   @ManyToOne()
   @JsonIgnore()
   private User author;
-  @OneToMany(mappedBy = "course")
+  @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Module> modules;
 
   public Course(){
 
   }
-
-  public Course(String courseName,User author){
-
-    this.courseName = courseName;
-    this.author = author;
-
-  }
-
-//  public Course(Integer id,String courseName,User author,List<Module> modules){
-//
-//    this.id = id;
-//    this.courseName = courseName;
-//    this.author = author;
-//    this.modules = modules;
-//
-//  }
 
   public Integer getId() {
     return id;
@@ -75,5 +60,11 @@ public class Course {
 
   public void setModules(List<Module> modules) {
     this.modules = modules;
+  }
+
+  public void set(Course newCourse){
+    this.id = newCourse.getId();
+    this.author = newCourse.getAuthor();
+    this.courseName = newCourse.courseName;
   }
 }

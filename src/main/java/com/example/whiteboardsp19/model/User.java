@@ -35,27 +35,6 @@ public class User {
 
   }
 
-  public User(String username,String password){
-    this.username = username;
-    this.password = password;
-  }
-
-//
-//  public User(Integer id,String username,String password,String email,String firstName,
-//       String lastName,Long phone,String role,LocalDate dateOfBirth){
-//
-//    this.id = id;
-//    this.username = username;
-//    this.password = password;
-//    this.email = email;
-//    this.firstName = firstName;
-//    this.lastName = lastName;
-//    this.phone = phone;
-//    this.role = role;
-//    this.dateOfBirth = dateOfBirth;
-//
-//  }
-
   public Integer getId() {
     return id;
   }

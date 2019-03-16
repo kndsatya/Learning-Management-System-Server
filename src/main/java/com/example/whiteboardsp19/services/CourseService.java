@@ -5,7 +5,10 @@ import com.example.whiteboardsp19.model.Lesson;
 import com.example.whiteboardsp19.model.Module;
 import com.example.whiteboardsp19.model.Topic;
 import com.example.whiteboardsp19.model.User;
+import com.example.whiteboardsp19.repository.CourseRepository;
+import com.example.whiteboardsp19.repository.UserRepository;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +18,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -26,33 +28,12 @@ import javax.servlet.http.HttpSession;
 @CrossOrigin(origins = "*", allowCredentials = "true", allowedHeaders = "*")
 public class CourseService {
 
-  private static List<Course> courses;
+  @Autowired
+  private CourseRepository courseRepository;
+  private UserService userService;
 
   public CourseService() {
-//
-//    User alice = new User(123, "alice", "alice", "alice@husky.neu.edu",
-//            "alice", "warner", 1234567890L,
-//            "FACULTY", LocalDate.of(1999, 02, 01));
-//
-//    User bob = new User(234, "bob", "bob", "bob@husky.neu.edu",
-//            "bob", "warner", 1230456789L,
-//            "FACULTY", LocalDate.of(1999, 02, 01));
-//
-//    Topic topic = new Topic(123,"first topic",new ArrayList<>());
-//    List<Topic> topicList = new ArrayList<>();
-//    topicList.add(topic);
-//    Lesson lesson = new Lesson(123,"firstLesson",topicList);
-//    List<Lesson> lessonList = new ArrayList<>();
-//    lessonList.add(lesson);
-//    Module module = new Module(123,"Module Name",lessonList);
-//    List<Module> moduleList = new ArrayList<>();
-//    moduleList.add(module);
-//    Course webDev = new Course(123, "Web Dev", alice, moduleList);
-//    Course softwareEngineering = new Course(234, "Software Engineering", alice, new ArrayList<>());
-
-    courses = new ArrayList<>();
-//    courses.add(webDev);
-//    courses.add(softwareEngineering);
+    this.userService = new UserService();
   }
 
 
@@ -60,14 +41,9 @@ public class CourseService {
   public List<Course> createCourse(@RequestBody Course course, HttpSession session) {
 
     if (session.getAttribute("CurrentUser") != null) {
-
       course.setAuthor((User) session.getAttribute("CurrentUser"));
-      Random r = new Random();
-      course.setId(r.nextInt(Integer.MAX_VALUE));
-      course.setModules(new ArrayList<>());
-      courses.add(course);
+      courseRepository.save(course);
     }
-
     return findAllCourses(session);
   }
 
@@ -77,11 +53,10 @@ public class CourseService {
     User currentUser = (User) session.getAttribute("CurrentUser");
 
     if (currentUser != null) {
-      for (Course course : this.courses) {
-        if (course.getAuthor().getId().equals(currentUser.getId())) {
-          courses.add(course);
-        }
-      }
+       User user = userService.findUserById(currentUser.getId());
+       System.out.println(user);
+       //return user.getAuthoredCourses();
+      return courses;
     }
 
     return courses;
@@ -93,6 +68,10 @@ public class CourseService {
     User currentUser = (User) session.getAttribute("CurrentUser");
 
     if (currentUser != null) {
+
+      User user = userService.findUserById(currentUser.getId());
+      List<Course> courses =  user.getAuthoredCourses();
+
       for (Course course : courses) {
 
         if (course.getId().equals(courseId) && course.getAuthor().getId().equals(currentUser.getId())) {
@@ -113,11 +92,15 @@ public class CourseService {
 
     if (currentUser != null) {
 
+      User user = userService.findUserById(currentUser.getId());
+      List<Course> courses =  user.getAuthoredCourses();
+
       for (int i = 0; i < courses.size(); i++) {
         Course course = courses.get(i);
         if (course.getId().equals(courseId) && course.getAuthor().getId().equals(currentUser.getId())) {
-          courses.set(i, updatedCourse);
-          return courses.get(i);
+          course.set(updatedCourse);
+          Course newCourse = courseRepository.save(course);
+          return newCourse;
         }
       }
     }
@@ -131,10 +114,13 @@ public class CourseService {
 
     if (currentUser != null) {
 
+      User user = userService.findUserById(currentUser.getId());
+      List<Course> courses =  user.getAuthoredCourses();
+
       for (int i = 0; i < courses.size(); i++) {
         Course course = courses.get(i);
         if (course.getId().equals(courseId)) {
-          courses.remove(i);
+          courseRepository.deleteById(courseId);
           return findAllCourses(session);
         }
       }

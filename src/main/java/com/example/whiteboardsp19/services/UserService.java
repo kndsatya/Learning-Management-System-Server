@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 import javax.servlet.http.HttpSession;
 
@@ -25,11 +24,8 @@ import javax.servlet.http.HttpSession;
 @CrossOrigin(origins = "*", allowCredentials = "true", allowedHeaders = "*")
 public class UserService {
 
-
-  private List<User> users = new ArrayList<>();
-
   @Autowired
-  UserRepository userRepository;
+  private UserRepository userRepository;
 
   public UserService() {
 
